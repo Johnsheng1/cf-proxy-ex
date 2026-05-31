@@ -1,10 +1,13 @@
-addEventListener('fetch', event => {
-  const url = new URL(event.request.url);
-  thisProxyServerUrlHttps = `${url.protocol}//${url.hostname}/`;
-  thisProxyServerUrl_hostOnly = url.host;
-  event.respondWith(handleRequest(event.request))
-})
+// ==================== Deno 入口 ====================
+Deno.serve({ port: 8000 }, (req: Request) => {
+    const url = new URL(req.url);
+    
+    // 重要：设置当前代理地址（用于相对路径等）
+    thisProxyServerUrlHttps = `${url.protocol}//${url.hostname}/`;
+    thisProxyServerUrl_hostOnly = url.host;
 
+    return handleRequest(req);
+});
 
 const str = "/";
 const lastVisitProxyCookie = "__PROXY_VISITEDSITE__";
